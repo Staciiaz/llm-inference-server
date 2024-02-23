@@ -5,13 +5,13 @@ from .chat_model import ChatModel
 
 
 def load_model(model_id: str, dtype: str) -> ChatModel:
-    if model_id == "meta-llama/Llama-2-7b":
+    if model_id in ("meta-llama/Llama-2-7b-chat-hf",):
         from .llama import Llama
         return Llama(model_id)
-    elif model_id == "google/gemma-7b-it":
+    elif model_id in ("google/gemma-2b-it", "google/gemma-7b-it"):
         from .gemma import Gemma
         return Gemma(model_id)
-    elif model_id == "mistralai/Mistral-7B-Instruct-v0.2":
+    elif model_id in ("mistralai/Mistral-7B-Instruct-v0.2",):
         from .mistral import Mistral
         return Mistral(model_id)
     elif model_id is None:
