@@ -1,19 +1,19 @@
-from dotenv import load_dotenv
+import os
 
-from src import models
+import uvicorn
+from dotenv import load_dotenv
+from fastapi import FastAPI
+
+from src.routers import chat_completions_v1
+
+app = FastAPI()
+app.include_router(
+    chat_completions_v1.router,
+    prefix="/v1",
+    tags=["chat_completions_v1"],
+)
 
 if __name__ == '__main__':
     load_dotenv()
-
-    messages = [
-        {"role": "user", "content": "Give me one concise sentence on what is python programming."},
-    ]
-
-    # model = models.MockChatModel()
-    # model = models.Llama("meta-llama/Llama-2-7b-chat-hf")
-    model = models.Gemma("google/gemma-2b-it")
-    # model = models.Mistral("mistralai/Mistral-7B-Instruct-v0.2")
-    # prompt = messages[-1]["content"]
-    response = model.chat_completions(messages)
-    # response = model.chat_completions(prompt)
-    print(response)
+    server_port = int(os.getenv("PORT"))
+    uvicorn.run(app, port=server_port, env_file='.env')
