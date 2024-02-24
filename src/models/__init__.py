@@ -2,6 +2,7 @@ from ..config import getenv
 from .chat_model import ChatModel
 from .gemma import Gemma
 from .llama import Llama
+from .llava import Llava
 from .mistral import Mistral
 from .mock import MockChatModel
 
@@ -13,6 +14,8 @@ def load_model(model_id: str, dtype: str, device: str) -> ChatModel:
         return Gemma(model_id, dtype, device)
     elif model_id in ("mistralai/Mistral-7B-Instruct-v0.2",):
         return Mistral(model_id, dtype, device)
+    elif model_id in ("llava-hf/llava-1.5-7b-hf",):
+        return Llava(model_id, dtype, device)
     elif model_id is None:
         return MockChatModel()
     else:

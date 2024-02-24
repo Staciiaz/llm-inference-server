@@ -1,14 +1,25 @@
-from typing import Optional
+from typing import Optional, Union
 
 from typing_extensions import Literal, Required, TypedDict
 
-type ChatCompletionRole = Literal["user", "assistant", "system"]
-type ConversationHistory = list[ChatCompletionUserMessageParam | ChatCompletionAssistantMessageParam |
-                                ChatCompletionSystemMessageParam]
+
+class ImageURL(TypedDict, total=False):
+    url: Required[str]
+    detail: Literal["auto", "low", "high"]
+
+class ChatCompletionContentPartImageParam(TypedDict, total=False):
+    image_url: Required[ImageURL]
+    type: Required[Literal["image_url"]]
+
+class ChatCompletionContentPartTextParam(TypedDict, total=False):
+    text: Required[str]
+    type: Required[Literal["text"]]
+
+ChatCompletionContentPartParam = Union[ChatCompletionContentPartTextParam, ChatCompletionContentPartImageParam]
 
 class ChatCompletionUserMessageParam(TypedDict):
     role: Required[Literal["user"]]
-    content: Required[str]
+    content: Required[Union[str, list[ChatCompletionContentPartParam]]]
 
 class ChatCompletionAssistantMessageParam(TypedDict):
     role: Required[Literal["assistant"]]
@@ -28,3 +39,6 @@ class ChatCompletionResponse:
     @property
     def completion_tokens(self) -> int:
         return self.output_tokens - self.input_tokens
+    
+ChatCompletionRole = Literal["user", "assistant", "system"]
+ConversationHistory = list[Union[ChatCompletionUserMessageParam, ChatCompletionAssistantMessageParam, ChatCompletionSystemMessageParam]]

@@ -22,14 +22,19 @@ Run the `main.py`:
 python main.py
 ```
 
-To see an example of how to inference the model, you can refer to the `examples/chat_completion.py` file in this repository.
+To see an example of how to inference the model, you can refer to the `examples` in this repository.
 
 ### Supported Huggingface Model
+**Chat Completion Model**
 ```
 meta-llama/Llama-2-7b-chat-hf
 google/gemma-2b-it
 google/gemma-7b-it
 mistralai/Mistral-7B-Instruct-v0.2
+```
+**Multimodal Model**
+```
+llava-hf/llava-1.5-7b-hf
 ```
 
 ### Disclaimer

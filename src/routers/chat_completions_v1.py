@@ -5,8 +5,9 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from ..models import ChatModel, get_model
-from ..types.api_v1 import (APIChatCompletionRequest, APIChatCompletionResponse,
-                            APIModelChoice, APIModelUsage)
+from ..types.api_v1 import (APIChatCompletionRequest,
+                            APIChatCompletionResponse, APIModelChoice,
+                            APIModelUsage)
 
 router = APIRouter()
 
