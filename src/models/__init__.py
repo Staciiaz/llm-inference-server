@@ -1,5 +1,3 @@
-from loguru import logger
-
 from ..config import getenv
 from .chat_model import ChatModel
 from .gemma import Gemma
@@ -24,7 +22,11 @@ def load_model(model_id: str, dtype: str, device: str) -> ChatModel:
 model_id = getenv("MODEL_ID")
 dtype = getenv("DTYPE")
 device = getenv("DEVICE")
-logger.info(f"Load model: {model_id} {dtype} {device}")
+print(f"Load model: {model_id} {dtype} {device}")
+
+if device == "mps" and dtype in ("int8", "int4"):
+    raise ValueError(f"Invalid device: {device} for dtype: {dtype}")
+
 model = load_model(model_id, dtype, device)
 
 def get_model() -> ChatModel:

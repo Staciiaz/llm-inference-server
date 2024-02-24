@@ -4,26 +4,25 @@ from ..types.chat_completion import (ChatCompletionAssistantMessageParam,
                                      ConversationHistory)
 
 
-class ChatCompletionRequest(BaseModel):
+class APIChatCompletionRequest(BaseModel):
     model: str
     messages: ConversationHistory
 
-class ModelUsage:
+class APIModelUsage:
     def __init__(self, prompt_tokens: int, completion_tokens: int, total_tokens: int):
         self.prompt_tokens = prompt_tokens
         self.completion_tokens = completion_tokens
         self.total_tokens = total_tokens
 
-class ModelChoice:
-    def __init__(self, message: str, messages: ChatCompletionAssistantMessageParam, logprobs: float, finish_reason: str, index: int):
+class APIModelChoice:
+    def __init__(self, message: ChatCompletionAssistantMessageParam, logprobs: float, finish_reason: str, index: int):
         self.message = message
-        self.messages = messages
         self.logprobs = logprobs
         self.finish_reason = finish_reason
         self.index = index
 
-class ChatCompletionResponse:
-    def __init__(self, id: str, object: str, created: int, model: str, usage: ModelUsage, choices: list[ModelChoice]):
+class APIChatCompletionResponse:
+    def __init__(self, id: str, object: str, created: int, model: str, usage: APIModelUsage, choices: list[APIModelChoice]):
         self.id = id
         self.object = object
         self.created = created
@@ -45,7 +44,6 @@ class ChatCompletionResponse:
             "choices": [
                 {
                     "message": self.choices[0].message,
-                    "messages": self.choices[0].messages,
                     "logprobs": self.choices[0].logprobs,
                     "finish_reason": self.choices[0].finish_reason,
                     "index": self.choices[0].index

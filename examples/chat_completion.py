@@ -1,4 +1,3 @@
-# Example: reuse your existing OpenAI setup
 from openai import OpenAI
 
 # Point to the local server
@@ -11,8 +10,7 @@ completion = client.chat.completions.create(
             "role": "user",
             "content": "Introduce yourself."
         }
-    ],
-    temperature=0.7, # this field is currently unused
+    ]
 )
 
-print(completion.choices[0].message)
+print(completion.choices[0].message.content)

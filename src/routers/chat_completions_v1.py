@@ -5,31 +5,30 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from ..models import ChatModel, get_model
-from ..types.api_v1 import (ChatCompletionRequest, ChatCompletionResponse,
-                            ModelChoice, ModelUsage)
+from ..types.api_v1 import (APIChatCompletionRequest, APIChatCompletionResponse,
+                            APIModelChoice, APIModelUsage)
 
 router = APIRouter()
 
 
-@router.post("/chat/completions")
-async def list(request: ChatCompletionRequest, model: Annotated[ChatModel, Depends(get_model)]):
-    model_output = model.chat_completions(request.messages)
-    response = ChatCompletionResponse(
+@router.post("/")
+async def list(request: APIChatCompletionRequest, model: Annotated[ChatModel, Depends(get_model)]):
+    chat_completion_response = model.chat_completions(request.messages)
+    response = APIChatCompletionResponse(
         id="chatcmpl-abc123",
         object="chat.completion",
         created=int(time.time()),
-        model=request.model,
-        usage=ModelUsage(
-            prompt_tokens=0,
-            completion_tokens=0,
-            total_tokens=0
+        model=chat_completion_response.model,
+        usage=APIModelUsage(
+            prompt_tokens=chat_completion_response.input_tokens,
+            completion_tokens=chat_completion_response.completion_tokens,
+            total_tokens=chat_completion_response.output_tokens
         ),
         choices=[
-            ModelChoice(
-                message=model_output,
-                messages={
+            APIModelChoice(
+                message={
                     "role": "assistant",
-                    "content": model_output,
+                    "content": chat_completion_response.response_message,
                 },
                 logprobs=None,
                 finish_reason="stop",

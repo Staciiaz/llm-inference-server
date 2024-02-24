@@ -7,7 +7,7 @@ from src.routers import chat_completions_v1
 app = FastAPI()
 app.include_router(
     chat_completions_v1.router,
-    prefix="/v1",
+    prefix="/v1/chat/completions",
     tags=["chat_completions_v1"],
 )
 
