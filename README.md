@@ -1,6 +1,6 @@
 # llm-inference-server
 
-This repository hosts an API server, utilizing [FastAPI](https://pypi.org/project/fastapi/), designed to deploy [Hugging Face models](https://huggingface.co/models) as a service, allowing users to perform inference via the [OpenAI](https://pypi.org/project/openai/) client. Please note that this repository is not officially affiliated with Hugging Face."
+This repository hosts an API server, utilizing [FastAPI](https://pypi.org/project/fastapi/), designed to deploy [Hugging Face models](https://huggingface.co/models) as a service, allowing users to perform inference via the [OpenAI](https://pypi.org/project/openai/) client. Please note that this repository is not officially affiliated with Hugging Face.
 
 Create and activate conda env:
 ```
@@ -12,8 +12,8 @@ Create a `.env` file following the format in `.env.example`:
 ```
 HUGGINGFACE_TOKEN=your_huggingface_token (for gated model)
 MODEL_ID=huggingface_model_id
-DTYPE=fp16
-DEVICE=cuda
+DTYPE=model_dtype (available option: fp32, bf16, fp16, int8, int4)
+DEVICE=device (available option: cuda (for NVIDIA), mps (for macOS))
 PORT=port_to_host_the_server
 ```
 
