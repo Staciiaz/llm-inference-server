@@ -9,9 +9,9 @@ from ..logging import logger
 from .chat_model import ChatModel
 
 
-class Llama(ChatModel):
+class LlamaChat(ChatModel):
     def __init__(self, model_id: str, dtype: str, device: str) -> None:
-        token = os.getenv("HUGGINGFACE_TOKEN")
+        token = os.getenv("HF_TOKEN")
         self.device = get_device_config(device)
         torch_dtype, quantization_config = get_quantization_config(dtype)
         self.templates = ("[/INST]", "</s>")

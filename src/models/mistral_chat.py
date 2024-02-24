@@ -7,7 +7,7 @@ from ..logging import logger
 from .chat_model import ChatModel
 
 
-class Mistral(ChatModel):
+class MistralChat(ChatModel):
     def __init__(self, model_id: str, dtype: str, device: str) -> None:
         self.device = get_device_config(device)
         torch_dtype, quantization_config = get_quantization_config(dtype)

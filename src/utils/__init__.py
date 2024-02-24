@@ -15,20 +15,16 @@ def get_quantization_config(dtype: str) -> tuple[torch.dtype, BitsAndBytesConfig
     elif dtype == "fp16":
         return torch.float16, None
     elif dtype == "int8":
-        return None, BitsAndBytesConfig(
-            load_in_8bit=True
-        )
+        return None, BitsAndBytesConfig(load_in_8bit=True)
     elif dtype == "int4":
-        return None, BitsAndBytesConfig(
-            load_in_4bit=True
-        )
+        return None, BitsAndBytesConfig(load_in_4bit=True)
     else:
         raise ValueError(f"Invalid dtype: {dtype}")
     
 
 def get_device_config(device: str) -> str:
     device = device.lower()
-    if device in ("cuda", "mps"):
+    if device in ("cpu", "cuda", "mps"):
         return device
     else:
         raise ValueError(f"Invalid device: {device}")
