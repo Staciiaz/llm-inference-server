@@ -13,7 +13,7 @@ Create a `.env` file following the format in `.env.example`:
 HUGGINGFACE_TOKEN=your_huggingface_token (for gated model)
 MODEL_ID=huggingface_model_id
 DTYPE=model_dtype (available option: fp32, bf16, fp16, int8, int4)
-DEVICE=device (available option: cuda (for NVIDIA), mps (for macOS))
+DEVICE=device (available option: cpu, cuda (for NVIDIA), mps (for macOS))
 PORT=port_to_host_the_server
 ```
 

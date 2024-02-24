@@ -27,7 +27,7 @@ dtype = getenv("DTYPE")
 device = getenv("DEVICE")
 print(f"Load model: {model_id} {dtype} {device}")
 
-if device == "mps" and dtype in ("int8", "int4"):
+if device in ("cuda", "mps") and dtype in ("int8", "int4"):
     raise ValueError(f"Invalid device: {device} for dtype: {dtype}")
 
 model = load_model(model_id, dtype, device)

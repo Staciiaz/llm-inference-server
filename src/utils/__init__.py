@@ -28,7 +28,7 @@ def get_quantization_config(dtype: str) -> tuple[torch.dtype, BitsAndBytesConfig
 
 def get_device_config(device: str) -> str:
     device = device.lower()
-    if device in ("cuda", "mps"):
+    if device in ("cpu", "cuda", "mps"):
         return device
     else:
         raise ValueError(f"Invalid device: {device}")
