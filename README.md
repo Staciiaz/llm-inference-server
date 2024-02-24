@@ -12,6 +12,8 @@ Create a `.env` file following the format in `.env.example`:
 ```
 HUGGINGFACE_TOKEN=your_huggingface_token (for gated model)
 MODEL_ID=huggingface_model_id
+DTYPE=fp16
+DEVICE=cuda
 PORT=port_to_host_the_server
 ```
 
@@ -20,7 +22,7 @@ Run the `main.py`:
 python main.py
 ```
 
-To see an example of how to inference the model, you can refer to the `test.py` file in this repository.
+To see an example of how to inference the model, you can refer to the `examples/chat_completion.py` file in this repository.
 
 ### Supported Huggingface Model
 ```

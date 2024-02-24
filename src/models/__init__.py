@@ -2,28 +2,30 @@ from loguru import logger
 
 from ..config import getenv
 from .chat_model import ChatModel
+from .gemma import Gemma
+from .llama import Llama
+from .mistral import Mistral
+from .mock import MockChatModel
 
 
-def load_model(model_id: str, dtype: str) -> ChatModel:
+def load_model(model_id: str, dtype: str, device: str) -> ChatModel:
     if model_id in ("meta-llama/Llama-2-7b-chat-hf",):
-        from .llama import Llama
-        return Llama(model_id)
+        return Llama(model_id, dtype, device)
     elif model_id in ("google/gemma-2b-it", "google/gemma-7b-it"):
-        from .gemma import Gemma
-        return Gemma(model_id)
+        return Gemma(model_id, dtype, device)
     elif model_id in ("mistralai/Mistral-7B-Instruct-v0.2",):
-        from .mistral import Mistral
-        return Mistral(model_id)
+        return Mistral(model_id, dtype, device)
     elif model_id is None:
-        from .mock import MockChatModel
         return MockChatModel()
     else:
         raise ValueError(f"Invalid model id: {model_id}")
 
 # Load the model from the environment variable
 model_id = getenv("MODEL_ID")
-logger.info(f"Load model: {model_id}")
-model = load_model(model_id, "FP32")
+dtype = getenv("DTYPE")
+device = getenv("DEVICE")
+logger.info(f"Load model: {model_id} {dtype} {device}")
+model = load_model(model_id, dtype, device)
 
 def get_model() -> ChatModel:
     return model
