@@ -1,12 +1,16 @@
-from transformers import AutoProcessor, LlavaForConditionalGeneration
-from PIL import Image
-from io import BytesIO
 from base64 import b64decode
+from io import BytesIO
 
-from ..types.chat_completion import ConversationHistory, ChatCompletionResponse, ChatCompletionUserMessageParam
+from PIL import Image
+from transformers import (AutoProcessor, LlavaForConditionalGeneration,
+                          TextStreamer)
+
+from ..logging import logger
+from ..types.chat_completion import (ChatCompletionRequest,
+                                     ChatCompletionResponse,
+                                     ChatCompletionUserMessageParam)
 from ..utils import (extract_assistant_output, get_device_config,
                      get_quantization_config)
-from ..logging import logger
 from .chat_model import ChatModel
 
 
@@ -18,6 +22,7 @@ class LlavaBase(ChatModel):
         self.model_id = model_id
         self.model = LlavaForConditionalGeneration.from_pretrained(model_id, device_map=self.device, torch_dtype=self.torch_dtype, low_cpu_mem_usage=True)
         self.processor = AutoProcessor.from_pretrained(model_id)
+        self.streamer = TextStreamer(self.processor)
             
     def get_input_prompt(self, user_message: ChatCompletionUserMessageParam) -> tuple[str, list[str]]:
         prompt = "USER: "
@@ -31,14 +36,13 @@ class LlavaBase(ChatModel):
         prompt += "ASSISTANT:"
         return prompt, b64_images
 
-    def chat_completions(self, messages: ConversationHistory) -> ChatCompletionResponse:
-        prompt, b64_images = self.get_input_prompt(messages[-1])
+    def chat_completions(self, request: ChatCompletionRequest) -> ChatCompletionResponse:
+        prompt, b64_images = self.get_input_prompt(request.messages[-1])
         images = [Image.open(BytesIO(b64decode(b64_image))) for b64_image in b64_images]
+        inputs = self.processor(prompt, images, return_tensors='pt').to(self.device)
         logger.info(f"Inferencing with the model {self.model_id} ...")
-        inputs = self.processor(prompt, images, return_tensors='pt').to(self.device, self.torch_dtype)
-        outputs = self.model.generate(**inputs, max_new_tokens=1000, do_sample=False)
+        outputs = self.model.generate(**inputs, streamer=self.streamer, max_new_tokens=1000, do_sample=True, temperature=request.temperature)
         decoded = self.processor.decode(outputs[0])
-        logger.info(f"Generated response:\n{decoded}")
         return ChatCompletionResponse(
             model=self.model_id,
             input_tokens=inputs["input_ids"].size(1),

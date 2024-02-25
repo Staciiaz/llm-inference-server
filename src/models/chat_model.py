@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
 
-from ..types.chat_completion import ConversationHistory, ChatCompletionResponse
+from ..types.chat_completion import (ChatCompletionRequest,
+                                     ChatCompletionResponse)
 
 
 class ChatModel(ABC):
     @abstractmethod
-    def chat_completions(self, messages: ConversationHistory) -> ChatCompletionResponse:
+    def chat_completions(self, request: ChatCompletionRequest) -> ChatCompletionResponse:
         pass

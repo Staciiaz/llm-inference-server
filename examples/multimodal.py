@@ -18,6 +18,7 @@ base64_image = encode_image(image_path)
 
 completion = client.chat.completions.create(
     model="local-model", # this field is currently unused
+    temperature=0.7,
     messages=[
         {
             "role": "user",

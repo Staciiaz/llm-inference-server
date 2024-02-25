@@ -14,7 +14,12 @@ router = APIRouter()
 
 @router.post("/")
 async def list(request: APIChatCompletionRequest, model: Annotated[ChatModel, Depends(get_model)]):
-    chat_completion_response = model.chat_completions(request.messages)
+    chat_completion_request = APIChatCompletionRequest(
+        model=request.model,
+        messages=request.messages,
+        temperature=request.temperature
+    )
+    chat_completion_response = model.chat_completions(chat_completion_request)
     response = APIChatCompletionResponse(
         id="chatcmpl-abc123",
         object="chat.completion",

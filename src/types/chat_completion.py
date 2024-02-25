@@ -42,3 +42,9 @@ class ChatCompletionResponse:
     
 ChatCompletionRole = Literal["user", "assistant", "system"]
 ConversationHistory = list[Union[ChatCompletionUserMessageParam, ChatCompletionAssistantMessageParam, ChatCompletionSystemMessageParam]]
+
+class ChatCompletionRequest:
+    def __init__(self, model: str, messages: ConversationHistory, temperature: float):
+        self.model = model
+        self.messages = messages
+        self.temperature = temperature

@@ -7,6 +7,7 @@ from ..types.chat_completion import (ChatCompletionAssistantMessageParam,
 class APIChatCompletionRequest(BaseModel):
     model: str
     messages: ConversationHistory
+    temperature: float
 
 class APIModelUsage:
     def __init__(self, prompt_tokens: int, completion_tokens: int, total_tokens: int):
